@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "AI Prompt Assistant",
+    "version": "0.1.0"
+  },
+  "menubar": {
+    "open_input": "Open Input",
+    "settings": "Settings",
+    "check_updates": "Check for Updates",
+    "quit": "Quit"
+  },
+  "input_dialog": {
+    "title": "Enter your prompt",
+    "placeholder": "Type your prompt here...",
+    "submit_button": "Ask",
+    "characters": "characters"
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "general": "General",
+      "history": "History",
+      "ai": "AI Selection",
+      "language": "Language",
+      "updates": "Updates",
+      "about": "About"
+    },
+    "general": {
+      "keyboard_shortcut": "Keyboard Shortcut",
+      "launch_at_login": "Launch at Login"
+    },
+    "history": {
+      "clear_history": "Clear Input History",
+      "confirm_clear": "Are you sure you want to clear all input history?",
+      "no_history": "No input history found"
+    },
+    "ai": {
+      "select_service": "Select AI Service",
+      "chatgpt": "ChatGPT",
+      "bard": "Google Bard",
+      "claude": "Claude"
+    },
+    "language": {
+      "select_language": "Select Language",
+      "english": "English",
+      "spanish": "Spanish",
+      "german": "German",
+      "swedish": "Swedish",
+      "turkish": "Turkish"
+    },
+    "updates": {
+      "check_automatically": "Check for Updates Automatically",
+      "check_now": "Check Now",
+      "last_checked": "Last checked: ",
+      "never": "Never"
+    },
+    "about": {
+      "version": "Version",
+      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "website": "Website",
+      "website_url": "https://raspiska.co"
+    }
+  },
+  "notifications": {
+    "copied": "Copied to clipboard",
+    "update_available": "Update Available",
+    "no_updates": "No Updates Available",
+    "update_error": "Error checking for updates"
+  }
+}

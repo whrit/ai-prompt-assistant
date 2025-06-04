@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "Asistente de Prompts IA",
+    "version": "0.1.0"
+  },
+  "menubar": {
+    "open_input": "Abrir Entrada",
+    "settings": "Configuración",
+    "check_updates": "Buscar Actualizaciones",
+    "quit": "Salir"
+  },
+  "input_dialog": {
+    "title": "Ingrese su prompt",
+    "placeholder": "Escriba su prompt aquí...",
+    "submit_button": "Preguntar",
+    "characters": "caracteres"
+  },
+  "settings": {
+    "title": "Configuración",
+    "tabs": {
+      "general": "General",
+      "history": "Historial",
+      "ai": "Selección de IA",
+      "language": "Idioma",
+      "updates": "Actualizaciones",
+      "about": "Acerca de"
+    },
+    "general": {
+      "keyboard_shortcut": "Atajo de Teclado",
+      "launch_at_login": "Iniciar al Arrancar"
+    },
+    "history": {
+      "clear_history": "Borrar Historial de Entrada",
+      "confirm_clear": "¿Está seguro de que desea borrar todo el historial de entrada?",
+      "no_history": "No se encontró historial de entrada"
+    },
+    "ai": {
+      "select_service": "Seleccionar Servicio de IA",
+      "chatgpt": "ChatGPT",
+      "bard": "Google Bard",
+      "claude": "Claude"
+    },
+    "language": {
+      "select_language": "Seleccionar Idioma",
+      "english": "Inglés",
+      "spanish": "Español",
+      "german": "Alemán",
+      "swedish": "Sueco",
+      "turkish": "Turco"
+    },
+    "updates": {
+      "check_automatically": "Buscar Actualizaciones Automáticamente",
+      "check_now": "Buscar Ahora",
+      "last_checked": "Última comprobación: ",
+      "never": "Nunca"
+    },
+    "about": {
+      "version": "Versión",
+      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "website": "Sitio Web",
+      "website_url": "https://raspiska.co"
+    }
+  },
+  "notifications": {
+    "copied": "Copiado al portapapeles",
+    "update_available": "Actualización Disponible",
+    "no_updates": "No Hay Actualizaciones Disponibles",
+    "update_error": "Error al buscar actualizaciones"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "KI-Prompt-Assistent",
+    "version": "0.1.0"
+  },
+  "menubar": {
+    "open_input": "Eingabe öffnen",
+    "settings": "Einstellungen",
+    "check_updates": "Nach Updates suchen",
+    "quit": "Beenden"
+  },
+  "input_dialog": {
+    "title": "Geben Sie Ihren Prompt ein",
+    "placeholder": "Schreiben Sie Ihren Prompt hier...",
+    "submit_button": "Fragen",
+    "characters": "Zeichen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "tabs": {
+      "general": "Allgemein",
+      "history": "Verlauf",
+      "ai": "KI-Auswahl",
+      "language": "Sprache",
+      "updates": "Updates",
+      "about": "Über"
+    },
+    "general": {
+      "keyboard_shortcut": "Tastenkombination",
+      "launch_at_login": "Beim Login starten"
+    },
+    "history": {
+      "clear_history": "Eingabeverlauf löschen",
+      "confirm_clear": "Sind Sie sicher, dass Sie den gesamten Eingabeverlauf löschen möchten?",
+      "no_history": "Kein Eingabeverlauf gefunden"
+    },
+    "ai": {
+      "select_service": "KI-Dienst auswählen",
+      "chatgpt": "ChatGPT",
+      "bard": "Google Bard",
+      "claude": "Claude"
+    },
+    "language": {
+      "select_language": "Sprache auswählen",
+      "english": "Englisch",
+      "spanish": "Spanisch",
+      "german": "Deutsch",
+      "swedish": "Schwedisch",
+      "turkish": "Türkisch"
+    },
+    "updates": {
+      "check_automatically": "Automatisch nach Updates suchen",
+      "check_now": "Jetzt prüfen",
+      "last_checked": "Zuletzt geprüft: ",
+      "never": "Nie"
+    },
+    "about": {
+      "version": "Version",
+      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "website": "Webseite",
+      "website_url": "https://raspiska.co"
+    }
+  },
+  "notifications": {
+    "copied": "In die Zwischenablage kopiert",
+    "update_available": "Update verfügbar",
+    "no_updates": "Keine Updates verfügbar",
+    "update_error": "Fehler beim Suchen nach Updates"
+  }
+}

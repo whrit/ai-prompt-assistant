@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "AI Prompt Asistanı",
+    "version": "0.1.0"
+  },
+  "menubar": {
+    "open_input": "Giriş Aç",
+    "settings": "Ayarlar",
+    "check_updates": "Güncellemeleri Kontrol Et",
+    "quit": "Çıkış"
+  },
+  "input_dialog": {
+    "title": "Promptunuzu girin",
+    "placeholder": "Promptunuzu buraya yazın...",
+    "submit_button": "Sor",
+    "characters": "karakter"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "tabs": {
+      "general": "Genel",
+      "history": "Geçmiş",
+      "ai": "AI Seçimi",
+      "language": "Dil",
+      "updates": "Güncellemeler",
+      "about": "Hakkında"
+    },
+    "general": {
+      "keyboard_shortcut": "Klavye Kısayolu",
+      "launch_at_login": "Başlangıçta Çalıştır"
+    },
+    "history": {
+      "clear_history": "Giriş Geçmişini Temizle",
+      "confirm_clear": "Tüm giriş geçmişini temizlemek istediğinizden emin misiniz?",
+      "no_history": "Giriş geçmişi bulunamadı"
+    },
+    "ai": {
+      "select_service": "AI Servisi Seçin",
+      "chatgpt": "ChatGPT",
+      "bard": "Google Bard",
+      "claude": "Claude"
+    },
+    "language": {
+      "select_language": "Dil Seçin",
+      "english": "İngilizce",
+      "spanish": "İspanyolca",
+      "german": "Almanca",
+      "swedish": "İsveççe",
+      "turkish": "Türkçe"
+    },
+    "updates": {
+      "check_automatically": "Güncellemeleri Otomatik Kontrol Et",
+      "check_now": "Şimdi Kontrol Et",
+      "last_checked": "Son kontrol: ",
+      "never": "Hiç"
+    },
+    "about": {
+      "version": "Sürüm",
+      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "website": "Web Sitesi",
+      "website_url": "https://raspiska.co"
+    }
+  },
+  "notifications": {
+    "copied": "Panoya kopyalandı",
+    "update_available": "Güncelleme Mevcut",
+    "no_updates": "Güncelleme Yok",
+    "update_error": "Güncellemeler kontrol edilirken hata oluştu"
+  }
+}

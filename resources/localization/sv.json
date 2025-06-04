@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "AI-Promptassistent",
+    "version": "0.1.0"
+  },
+  "menubar": {
+    "open_input": "Öppna inmatning",
+    "settings": "Inställningar",
+    "check_updates": "Sök efter uppdateringar",
+    "quit": "Avsluta"
+  },
+  "input_dialog": {
+    "title": "Ange din prompt",
+    "placeholder": "Skriv din prompt här...",
+    "submit_button": "Fråga",
+    "characters": "tecken"
+  },
+  "settings": {
+    "title": "Inställningar",
+    "tabs": {
+      "general": "Allmänt",
+      "history": "Historik",
+      "ai": "AI-val",
+      "language": "Språk",
+      "updates": "Uppdateringar",
+      "about": "Om"
+    },
+    "general": {
+      "keyboard_shortcut": "Kortkommando",
+      "launch_at_login": "Starta vid inloggning"
+    },
+    "history": {
+      "clear_history": "Rensa inmatningshistorik",
+      "confirm_clear": "Är du säker på att du vill rensa all inmatningshistorik?",
+      "no_history": "Ingen inmatningshistorik hittades"
+    },
+    "ai": {
+      "select_service": "Välj AI-tjänst",
+      "chatgpt": "ChatGPT",
+      "bard": "Google Bard",
+      "claude": "Claude"
+    },
+    "language": {
+      "select_language": "Välj språk",
+      "english": "Engelska",
+      "spanish": "Spanska",
+      "german": "Tyska",
+      "swedish": "Svenska",
+      "turkish": "Turkiska"
+    },
+    "updates": {
+      "check_automatically": "Sök automatiskt efter uppdateringar",
+      "check_now": "Sök nu",
+      "last_checked": "Senast kontrollerad: ",
+      "never": "Aldrig"
+    },
+    "about": {
+      "version": "Version",
+      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "website": "Webbplats",
+      "website_url": "https://raspiska.co"
+    }
+  },
+  "notifications": {
+    "copied": "Kopierad till urklipp",
+    "update_available": "Uppdatering tillgänglig",
+    "no_updates": "Inga uppdateringar tillgängliga",
+    "update_error": "Fel vid sökning efter uppdateringar"
+  }
+}
