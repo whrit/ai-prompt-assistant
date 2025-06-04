@@ -26,7 +26,7 @@ class SettingsManager:
         """Load settings from the settings file."""
         # Create default settings
         self.settings = {
-            "keyboard_shortcut": "⌘ZX",
+            "keyboard_shortcut": "⌃⌘D",
             "ai_service": "chatgpt",
             "language": "en",
             "launch_at_login": False,

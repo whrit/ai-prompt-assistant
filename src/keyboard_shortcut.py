@@ -5,6 +5,9 @@ This module handles global keyboard shortcut registration using pynput.
 """
 
 import threading
+import subprocess
+import sys
+import os
 from pynput import keyboard
 
 
@@ -19,9 +22,11 @@ class KeyboardShortcutHandler:
         self.listener = None
         self.currently_pressed = set()
         self.shortcut_str = ""
+        self.is_trusted = True  # Assume trusted until proven otherwise
+        self.permission_error = None
     
     def parse_shortcut(self, shortcut_str):
-        """Parse a shortcut string like '⌘ZX' into keys and modifiers."""
+        """Parse a shortcut string like '⌘' into keys and modifiers."""
         self.shortcut_str = shortcut_str
         keys = []
         modifiers = []
@@ -60,7 +65,26 @@ class KeyboardShortcutHandler:
             print(f"Keyboard shortcut registered: {shortcut_str}")
             return True
         except Exception as e:
-            print(f"Error registering keyboard shortcut: {e}")
+            error_str = str(e).lower()
+            if "trust" in error_str or "permission" in error_str or "accessibility" in error_str:
+                self.is_trusted = False
+                self.permission_error = str(e)
+                print(f"Accessibility permission error: {e}")
+            else:
+                print(f"Error registering keyboard shortcut: {e}")
+            return False
+    
+    def needs_accessibility_permissions(self):
+        """Check if the application needs to request accessibility permissions."""
+        return not self.is_trusted and self.permission_error is not None
+    
+    def open_accessibility_preferences(self):
+        """Open the System Preferences Accessibility panel."""
+        try:
+            subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"])
+            return True
+        except Exception as e:
+            print(f"Error opening accessibility preferences: {e}")
             return False
     
     def start_listener(self):
@@ -128,8 +152,31 @@ class KeyboardShortcutHandler:
         self.shortcut_modifiers = []
         self.callback = None
         self.currently_pressed.clear()
+    
+    def restart_listener(self):
+        """Restart the keyboard listener if it was previously registered."""
+        try:
+            # First, ensure any existing listener is properly stopped
+            if self.listener:
+                try:
+                    if self.listener.running:
+                        self.listener.stop()
+                except Exception as e:
+                    print(f"Error stopping existing listener: {e}")
+                self.listener = None
+            
+            # Only restart if we have both callback and shortcut keys
+            if self.callback and self.shortcut_keys:
+                # Create a fresh listener
+                self.start_listener()
+                print("Keyboard shortcut listener successfully restarted")
+                return True
+            else:
+                print("Cannot restart listener: missing callback or shortcut keys")
+        except Exception as e:
+            print(f"Error in restart_listener: {e}")
         
-        return True
+        return False
 
 
 # Example usage:

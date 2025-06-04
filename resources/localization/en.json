@@ -7,6 +7,7 @@
     "open_input": "Open Input",
     "settings": "Settings",
     "check_updates": "Check for Updates",
+    "accessibility": "Accessibility Settings",
     "quit": "Quit"
   },
   "input_dialog": {
@@ -56,15 +57,21 @@
     },
     "about": {
       "version": "Version",
-      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "copyright": " 2025 Raspiska Tech & Consultancy",
       "website": "Website",
       "website_url": "https://raspiska.co"
     }
   },
   "notifications": {
     "copied": "Copied to clipboard",
-    "update_available": "Update Available",
-    "no_updates": "No Updates Available",
+    "language_changed": "Language changed to {0}",
+    "update_available": "Update available: version {0}",
+    "no_updates": "You are using the latest version",
+    "api_error": "Error connecting to API: {0}",
+    "accessibility_required": "Accessibility Permission Required",
+    "accessibility_message": "To use keyboard shortcuts, AI Prompt Assistant needs accessibility permissions. Would you like to open System Preferences to grant permission?",
+    "open_settings": "Open Settings",
+    "cancel": "Cancel",
     "update_error": "Error checking for updates"
   }
 }
