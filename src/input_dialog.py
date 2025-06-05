@@ -21,7 +21,6 @@ class InputDialog:
         self.char_counter = None
         self.text_input = None
         self.result = {"text": "", "submitted": False}
-        self.is_initialized = False
     
     def run(self):
         """Create and show the dialog, then return the result."""
@@ -32,27 +31,19 @@ class InputDialog:
         
         # Reset result for this run
         self.result = {"text": "", "submitted": False}
-            
-        # Create dialog if not created yet, otherwise just show it
-        if not self.is_initialized:
-            self.create_dialog()
-            self.is_initialized = True
-        else:
-            # Clear the text input
-            if self.text_input:
-                self.text_input.clear()
-            # Show the dialog again
-            self.dialog.show()
-            # Force focus to the text input
-            self.text_input.setFocus()
-            QTimer.singleShot(100, self.text_input.setFocus)
+        
+        # Create a completely new dialog each time
+        self.dialog = QDialog()
+        self.setup_dialog()
         
         # Execute the dialog
-        self.dialog.exec()
+        result = self.dialog.exec()
+        
+        # Return the result
         return self.result if self.result["submitted"] else None
     
-    def create_dialog(self):
-        """Create the input dialog UI."""
+    def setup_dialog(self):
+        """Set up the input dialog UI."""
         self.dialog = QDialog()
         self.dialog.setWindowTitle("AI Prompt Assistant")
         self.dialog.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
@@ -114,15 +105,38 @@ class InputDialog:
         # Set layout
         self.dialog.setLayout(layout)
         
-        # Set focus to the text input when dialog is shown
-        self.dialog.show()
-        
-        # Force focus to the text input using multiple approaches
-        self.text_input.setFocus()
-        QTimer.singleShot(100, self.text_input.setFocus)
-        
-        # Connect enter key to submit
+        # Add event filter for Enter key
         self.text_input.installEventFilter(EnterKeyFilter(self))
+        
+        # Set up focus handling - this is critical for the dialog to work properly
+        # Connect to the dialog's show event to set focus after it's visible
+        self.dialog.showEvent = lambda event: self._on_dialog_shown(event)
+        
+        # Also set up a timer to ensure focus is set after dialog is fully rendered
+        QTimer.singleShot(10, self._setup_focus_timers)
+    
+    def _on_dialog_shown(self, event):
+        """Handle dialog show event to set focus."""
+        # Call the original showEvent handler
+        QDialog.showEvent(self.dialog, event)
+        # Set focus to the text input
+        self.text_input.setFocus()
+        # Ensure the window is active
+        self.dialog.activateWindow()
+    
+    def _setup_focus_timers(self):
+        """Set up multiple timers to ensure focus is set."""
+        # Use multiple timers with increasing delays for maximum reliability
+        QTimer.singleShot(50, self._force_focus)
+        QTimer.singleShot(150, self._force_focus)
+        QTimer.singleShot(300, self._force_focus)
+        QTimer.singleShot(500, self._force_focus)
+    
+    def _force_focus(self):
+        """Force focus to the text input field."""
+        if self.dialog and self.text_input:
+            self.text_input.setFocus()
+            self.dialog.activateWindow()
     
     def update_char_count(self):
         """Update the character counter with more detailed information."""

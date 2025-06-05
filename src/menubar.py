@@ -24,14 +24,14 @@ class MenuBarApp(rumps.App):
         # Initialize settings
         self.settings = SettingsManager()
         
+        # Initialize input dialog to None - will create a new one each time
+        self.input_dialog = None
+        
         # Flag for keyboard shortcut trigger
         self._shortcut_triggered = False
         
         # Initialize shortcut handler
         self.shortcut_handler = None
-        
-        # Create a reusable input dialog
-        self.input_dialog = InputDialog()
         
         # We need to initialize the shortcut handler in a separate thread
         # because it needs to run in the main thread of a Cocoa application
@@ -163,8 +163,9 @@ class MenuBarApp(rumps.App):
     @rumps.clicked("Open Input")
     def open_input(self, sender=None):
         """Open the input dialog."""
-        # Use our reusable input dialog
-        result = self.input_dialog.run()
+        # Create a new input dialog each time
+        input_dialog = InputDialog()
+        result = input_dialog.run()
         
         if result and result.get("text"):
             self.process_input(result["text"])
