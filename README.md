@@ -2,7 +2,7 @@
 
 A macOS menubar application that enhances your AI interactions by optimizing prompts and providing quick access to AI services.
 
-![AI Prompt Assistant Logo](resources/icons/logo.png)
+![AI Prompt Assistant Logo](resources/icons/menubar_icon.png)
 
 ## Features
 
