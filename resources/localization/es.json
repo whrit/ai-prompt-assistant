@@ -3,10 +3,27 @@
     "name": "Asistente de Prompts IA",
     "version": "0.1.0"
   },
+  "api": {
+    "missing_key": {
+      "title": "Falta Clave API",
+      "message": "No se encontró la clave API de OpenAI. Por favor, añade tu clave API en Configuración."
+    },
+    "error": {
+      "title": "Error de API",
+      "message": "Error al reformular el prompt:"
+    },
+    "success": {
+      "title": "Prompt Reformulado",
+      "message": "Tu prompt fue reformulado con éxito y enviado al navegador."
+    }
+  },
   "menubar": {
     "open_input": "Abrir Entrada",
+    "history": "Historial",
     "settings": "Configuración",
     "check_updates": "Buscar Actualizaciones",
+    "accessibility": "Configuración de Accesibilidad",
+    "about": "Acerca de",
     "quit": "Salir"
   },
   "input_dialog": {
@@ -32,13 +49,34 @@
     "history": {
       "clear_history": "Borrar Historial de Entrada",
       "confirm_clear": "¿Está seguro de que desea borrar todo el historial de entrada?",
-      "no_history": "No se encontró historial de entrada"
+      "no_history": "No se encontró historial de entrada",
+      "dialog_title": "Historial de Prompts",
+      "date_column": "Fecha",
+      "prompt_column": "Prompt",
+      "service_column": "Servicio IA",
+      "preview_label": "Vista previa:",
+      "reuse_button": "Reutilizar Prompt",
+      "delete_button": "Eliminar",
+      "clear_all_button": "Borrar Todo",
+      "close_button": "Cerrar",
+      "confirm_delete": "¿Está seguro de que desea eliminar este prompt?",
+      "confirm_clear_all": "¿Está seguro de que desea eliminar TODOS los prompts del historial? Esta acción no se puede deshacer."
     },
     "ai": {
       "select_service": "Seleccionar Servicio de IA",
       "chatgpt": "ChatGPT",
       "bard": "Google Bard",
-      "claude": "Claude"
+      "claude": "Claude",
+      "api_key": "Clave API",
+      "openai_api_key": "Clave API de OpenAI:",
+      "api_key_saved": "Clave API guardada con éxito",
+      "test_api_key": "Probar Clave",
+      "testing": "Probando...",
+      "api_key_error": "Error de Clave API",
+      "api_key_empty": "Por favor, introduce una clave API para probar.",
+      "api_key_valid": "Clave API Válida",
+      "api_key_success": "La clave API es válida y funciona correctamente.",
+      "api_key_invalid": "La clave API parece ser inválida:"
     },
     "language": {
       "select_language": "Seleccionar Idioma",
@@ -55,8 +93,12 @@
       "never": "Nunca"
     },
     "about": {
+      "title": "Acerca de AI Prompt Assistant",
       "version": "Versión",
-      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "description": "Una aplicación de barra de menú que te ayuda a crear mejores prompts para IA.",
+      "copyright": "2025 Raspiska Tech & Consultancy",
+      "credits": "Creado con ❤️",
+      "close": "Cerrar",
       "website": "Sitio Web",
       "website_url": "https://raspiska.co"
     }

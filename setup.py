@@ -7,7 +7,13 @@ from setuptools import setup
 APP = ['src/main.py']
 DATA_FILES = [
     ('resources/icons', ['resources/icons/menubar_icon.png']),
-    ('resources/localization', ['resources/localization/en.json'])
+    ('resources/localization', [
+        'resources/localization/en.json',
+        'resources/localization/es.json',
+        'resources/localization/de.json',
+        'resources/localization/sv.json',
+        'resources/localization/tr.json'
+    ])
 ]
 OPTIONS = {
     'argv_emulation': True,
@@ -20,8 +26,8 @@ OPTIONS = {
         'CFBundleShortVersionString': '0.1.0',
         'NSHumanReadableCopyright': '© 2025 Raspiska Tech & Consultancy',
     },
-    'packages': ['rumps', 'PyQt6'],
-    'includes': ['keyring', 'requests'],
+    'packages': ['rumps', 'PyQt6', 'pynput'],
+    'includes': ['keyring', 'requests', 'sqlite3', 'webbrowser', 'json', 'os', 'sys'],
 }
 
 setup(
@@ -34,6 +40,7 @@ setup(
         'rumps',
         'PyQt6',
         'requests',
-        'keyring'
+        'keyring',
+        'pynput'
     ],
 )

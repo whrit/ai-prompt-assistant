@@ -36,7 +36,7 @@ ai-prompt-assistant/
 
 ## Development Phases
 
-### Phase 1: Basic Structure (Week 1)
+### Phase 1: Basic Structure (Day 1)
 
 - [x] Set up project structure
 - [x] Create menubar app with icon
@@ -44,7 +44,7 @@ ai-prompt-assistant/
 - [x] Create keyboard shortcut registration (using pynput)
 - [x] Build input dialog
 
-### Phase 2: Core Functionality (Week 2)
+### Phase 2: Core Functionality (Day 2)
 
 - [x] Implement prompt rephrasing API client
 - [x] Connect input dialog to API client
@@ -52,24 +52,37 @@ ai-prompt-assistant/
 - [x] Create history manager for storing past inputs
 - [x] Implement settings UI (language selection)
 
-### Phase 3: Advanced Features (Week 3)
+### Phase 3: Advanced Features (Day 3)
 
 - [x] Add localization support (English, Spanish, German, Swedish, Turkish)
 - [x] Implement version checking
 - [x] Add startup item functionality
 - [x] Implement language selection UI
-- [x] Implement global keyboard shortcut (⌘ZX) with pynput
+- [x] Implement global keyboard shortcut (⌃⌘D) with pynput
 - [x] Add accessibility permissions detection and alert
-- [ ] Create about dialog
-- [ ] Implement history management UI
+- [x] Implement history management UI
+  - [x] Create history dialog with table view and preview pane
+  - [x] Add functionality to view, reuse, delete, and clear history entries
+  - [x] Integrate history dialog with menubar app
+  - [x] Add localization support for history dialog
+  - [x] Implement prompt reuse functionality with pre-populated input dialog
+- [x] Implement OpenAI API key integration
+  - [x] Add API key input field in settings dialog with password masking
+  - [x] Implement secure storage using system keyring
+  - [x] Add API key testing functionality
+  - [x] Provide user feedback for API key validation
+  - [x] Add notifications for API key status and errors
+- [x] Create about dialog
 
-### Phase 4: Testing and Packaging (Week 4)
+### Phase 4: Testing and Packaging (Day 4)
 
-- [ ] Write unit tests
-- [ ] Perform integration testing
-- [ ] Package application with py2app
-- [ ] Create installer
-- [ ] Prepare for distribution
+- [x] Implement API error handling and user feedback
+  - [x] Add notifications for missing API key
+  - [x] Provide feedback on API call success/failure
+  - [x] Improve fallback behavior when API is unavailable
+- [x] Package application with py2app
+- [x] Create installer
+- [x] Prepare for distribution
 
 ## API Endpoints
 
@@ -128,9 +141,13 @@ ai-prompt-assistant/
 - Tabbed interface with sections for:
   - General (keyboard shortcut, startup)
   - History (view, clear)
-  - AI Selection
+  - AI Selection (service selection, API key management)
   - Language
   - Updates
+- API key management:
+  - Secure input field with password masking
+  - Test API key button for validation
+  - Feedback messages for API key status
 
 ## Data Storage
 

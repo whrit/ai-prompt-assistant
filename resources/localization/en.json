@@ -3,11 +3,27 @@
     "name": "AI Prompt Assistant",
     "version": "0.1.0"
   },
+  "api": {
+    "missing_key": {
+      "title": "API Key Missing",
+      "message": "No OpenAI API key found. Please add your API key in Settings."
+    },
+    "error": {
+      "title": "API Error",
+      "message": "Error rephrasing prompt:"
+    },
+    "success": {
+      "title": "Prompt Rephrased",
+      "message": "Your prompt was successfully rephrased and sent to the browser."
+    }
+  },
   "menubar": {
     "open_input": "Open Input",
+    "history": "History",
     "settings": "Settings",
     "check_updates": "Check for Updates",
     "accessibility": "Accessibility Settings",
+    "about": "About",
     "quit": "Quit"
   },
   "input_dialog": {
@@ -33,13 +49,34 @@
     "history": {
       "clear_history": "Clear Input History",
       "confirm_clear": "Are you sure you want to clear all input history?",
-      "no_history": "No input history found"
+      "no_history": "No input history found",
+      "dialog_title": "Prompt History",
+      "date_column": "Date",
+      "prompt_column": "Prompt",
+      "service_column": "AI Service",
+      "preview_label": "Preview:",
+      "reuse_button": "Reuse Prompt",
+      "delete_button": "Delete",
+      "clear_all_button": "Clear All",
+      "close_button": "Close",
+      "confirm_delete": "Are you sure you want to delete this prompt?",
+      "confirm_clear_all": "Are you sure you want to delete ALL prompts from history? This cannot be undone."
     },
     "ai": {
       "select_service": "Select AI Service",
       "chatgpt": "ChatGPT",
       "bard": "Google Bard",
-      "claude": "Claude"
+      "claude": "Claude",
+      "api_key": "API Key",
+      "openai_api_key": "OpenAI API Key:",
+      "api_key_saved": "API key saved successfully",
+      "test_api_key": "Test Key",
+      "testing": "Testing...",
+      "api_key_error": "API Key Error",
+      "api_key_empty": "Please enter an API key to test.",
+      "api_key_valid": "API Key Valid",
+      "api_key_success": "The API key is valid and working correctly.",
+      "api_key_invalid": "The API key appears to be invalid:"
     },
     "language": {
       "select_language": "Select Language",
@@ -56,8 +93,12 @@
       "never": "Never"
     },
     "about": {
+      "title": "About AI Prompt Assistant",
       "version": "Version",
-      "copyright": " 2025 Raspiska Tech & Consultancy",
+      "description": "A menubar application that helps you create better AI prompts.",
+      "copyright": "2025 Raspiska Tech & Consultancy",
+      "credits": "Created with ❤️",
+      "close": "Close",
       "website": "Website",
       "website_url": "https://raspiska.co"
     }

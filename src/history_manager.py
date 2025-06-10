@@ -109,6 +109,19 @@ class HistoryManager:
         conn.close()
         return entry
     
+    def delete_entry(self, entry_id):
+        """Delete a specific entry by ID."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("DELETE FROM input_history WHERE id = ?", (entry_id,))
+        
+        conn.commit()
+        deleted = cursor.rowcount > 0
+        conn.close()
+        
+        return deleted
+    
     def clear_history(self):
         """Clear all history entries."""
         conn = sqlite3.connect(self.db_path)

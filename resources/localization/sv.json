@@ -3,10 +3,27 @@
     "name": "AI-Promptassistent",
     "version": "0.1.0"
   },
+  "api": {
+    "missing_key": {
+      "title": "API-nyckel saknas",
+      "message": "Ingen OpenAI API-nyckel hittades. Lägg till din API-nyckel i Inställningar."
+    },
+    "error": {
+      "title": "API-fel",
+      "message": "Fel vid omformulering av prompt:"
+    },
+    "success": {
+      "title": "Prompt omformulerad",
+      "message": "Din prompt har omformulerats och skickats till webbläsaren."
+    }
+  },
   "menubar": {
     "open_input": "Öppna inmatning",
+    "history": "Historik",
     "settings": "Inställningar",
     "check_updates": "Sök efter uppdateringar",
+    "accessibility": "Tillgänglighetsinställningar",
+    "about": "Om",
     "quit": "Avsluta"
   },
   "input_dialog": {
@@ -32,13 +49,34 @@
     "history": {
       "clear_history": "Rensa inmatningshistorik",
       "confirm_clear": "Är du säker på att du vill rensa all inmatningshistorik?",
-      "no_history": "Ingen inmatningshistorik hittades"
+      "no_history": "Ingen inmatningshistorik hittades",
+      "dialog_title": "Prompthistorik",
+      "date_column": "Datum",
+      "prompt_column": "Prompt",
+      "service_column": "AI-tjänst",
+      "preview_label": "Förhandsvisning:",
+      "reuse_button": "Återanvänd prompt",
+      "delete_button": "Ta bort",
+      "clear_all_button": "Rensa allt",
+      "close_button": "Stäng",
+      "confirm_delete": "Är du säker på att du vill ta bort denna prompt?",
+      "confirm_clear_all": "Är du säker på att du vill ta bort ALLA prompter från historiken? Detta kan inte ångras."
     },
     "ai": {
       "select_service": "Välj AI-tjänst",
       "chatgpt": "ChatGPT",
       "bard": "Google Bard",
-      "claude": "Claude"
+      "claude": "Claude",
+      "api_key": "API-nyckel",
+      "openai_api_key": "OpenAI API-nyckel:",
+      "api_key_saved": "API-nyckel sparad framgångsrikt",
+      "test_api_key": "Testa nyckel",
+      "testing": "Testar...",
+      "api_key_error": "API-nyckel fel",
+      "api_key_empty": "Vänligen ange en API-nyckel att testa.",
+      "api_key_valid": "API-nyckel giltig",
+      "api_key_success": "API-nyckeln är giltig och fungerar korrekt.",
+      "api_key_invalid": "API-nyckeln verkar vara ogiltig:"
     },
     "language": {
       "select_language": "Välj språk",
@@ -55,8 +93,12 @@
       "never": "Aldrig"
     },
     "about": {
+      "title": "Om AI-Promptassistent",
       "version": "Version",
-      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "description": "En menyfältsapplikation som hjälper dig att skapa bättre AI-prompts.",
+      "copyright": "2025 Raspiska Tech & Consultancy",
+      "credits": "Skapad med ❤️",
+      "close": "Stäng",
       "website": "Webbplats",
       "website_url": "https://raspiska.co"
     }

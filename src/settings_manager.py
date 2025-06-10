@@ -31,8 +31,17 @@ class SettingsManager:
             "language": "en",
             "launch_at_login": False,
             "check_updates_automatically": True,
-            "history_limit": 100
+            "history_limit": 100,
+            "openai_api_key": ""
         }
+        
+        # Try to load API key from keyring
+        try:
+            api_key = keyring.get_password("ai_prompt_assistant", "openai_api_key")
+            if api_key:
+                self.settings["openai_api_key"] = api_key
+        except Exception as e:
+            print(f"Error loading API key from keyring: {e}")
         
         # Load settings from file if it exists
         if os.path.exists(self.settings_file):
@@ -56,12 +65,32 @@ class SettingsManager:
     
     def get(self, key, default=None):
         """Get a setting value."""
+        # For API key, try to get from keyring first
+        if key == "openai_api_key":
+            try:
+                api_key = keyring.get_password("ai_prompt_assistant", "openai_api_key")
+                if api_key:
+                    return api_key
+            except Exception as e:
+                print(f"Error getting API key from keyring: {e}")
+                
         return self.settings.get(key, default)
     
     def set(self, key, value):
-        """Set a setting value and save settings."""
+        """Set a setting value."""
         self.settings[key] = value
+        
+        # Store API key in keyring for security
+        if key == "openai_api_key" and value:
+            try:
+                keyring.set_password("ai_prompt_assistant", "openai_api_key", value)
+                # Don't store the actual key in the settings file
+                self.settings[key] = "*****"
+            except Exception as e:
+                print(f"Error storing API key in keyring: {e}")
+                
         self.save_settings()
+        return True
     
     def get_secure(self, key):
         """Get a secure setting value from the keychain."""

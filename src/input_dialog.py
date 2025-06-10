@@ -14,12 +14,17 @@ from PyQt6.QtGui import QFont, QIcon
 class InputDialog:
     """Custom input dialog that appears in the center of the screen."""
     
-    def __init__(self):
-        """Initialize the input dialog."""
+    def __init__(self, initial_text=""):
+        """Initialize the input dialog.
+        
+        Args:
+            initial_text (str): Optional text to pre-populate the input field with.
+        """
         self.app = None
         self.dialog = None
         self.char_counter = None
         self.text_input = None
+        self.initial_text = initial_text
         self.result = {"text": "", "submitted": False}
     
     def run(self):
@@ -80,6 +85,15 @@ class InputDialog:
         self.text_input = QTextEdit()
         self.text_input.setPlaceholderText("Type your prompt here...")
         self.text_input.setFont(QFont("Arial", 12))
+        
+        # Set initial text if provided
+        if self.initial_text:
+            self.text_input.setText(self.initial_text)
+            # Position cursor at the end of the text
+            cursor = self.text_input.textCursor()
+            cursor.movePosition(cursor.MoveOperation.End)
+            self.text_input.setTextCursor(cursor)
+            
         layout.addWidget(self.text_input)
         
         # Add character counter with improved styling

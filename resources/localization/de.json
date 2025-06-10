@@ -3,10 +3,27 @@
     "name": "KI-Prompt-Assistent",
     "version": "0.1.0"
   },
+  "api": {
+    "missing_key": {
+      "title": "API-Schlüssel fehlt",
+      "message": "Kein OpenAI API-Schlüssel gefunden. Bitte füge deinen API-Schlüssel in den Einstellungen hinzu."
+    },
+    "error": {
+      "title": "API-Fehler",
+      "message": "Fehler beim Umformulieren des Prompts:"
+    },
+    "success": {
+      "title": "Prompt umformuliert",
+      "message": "Dein Prompt wurde erfolgreich umformuliert und an den Browser gesendet."
+    }
+  },
   "menubar": {
     "open_input": "Eingabe öffnen",
+    "history": "Verlauf",
     "settings": "Einstellungen",
     "check_updates": "Nach Updates suchen",
+    "accessibility": "Barrierefreiheit-Einstellungen",
+    "about": "Über",
     "quit": "Beenden"
   },
   "input_dialog": {
@@ -32,13 +49,34 @@
     "history": {
       "clear_history": "Eingabeverlauf löschen",
       "confirm_clear": "Sind Sie sicher, dass Sie den gesamten Eingabeverlauf löschen möchten?",
-      "no_history": "Kein Eingabeverlauf gefunden"
+      "no_history": "Kein Eingabeverlauf gefunden",
+      "dialog_title": "Prompt-Verlauf",
+      "date_column": "Datum",
+      "prompt_column": "Prompt",
+      "service_column": "KI-Dienst",
+      "preview_label": "Vorschau:",
+      "reuse_button": "Prompt wiederverwenden",
+      "delete_button": "Löschen",
+      "clear_all_button": "Alles löschen",
+      "close_button": "Schließen",
+      "confirm_delete": "Sind Sie sicher, dass Sie diesen Prompt löschen möchten?",
+      "confirm_clear_all": "Sind Sie sicher, dass Sie ALLE Prompts aus dem Verlauf löschen möchten? Dies kann nicht rückgängig gemacht werden."
     },
     "ai": {
       "select_service": "KI-Dienst auswählen",
       "chatgpt": "ChatGPT",
       "bard": "Google Bard",
-      "claude": "Claude"
+      "claude": "Claude",
+      "api_key": "API-Schlüssel",
+      "openai_api_key": "OpenAI API-Schlüssel:",
+      "api_key_saved": "API-Schlüssel erfolgreich gespeichert",
+      "test_api_key": "Schlüssel testen",
+      "testing": "Teste...",
+      "api_key_error": "API-Schlüssel Fehler",
+      "api_key_empty": "Bitte geben Sie einen API-Schlüssel zum Testen ein.",
+      "api_key_valid": "API-Schlüssel gültig",
+      "api_key_success": "Der API-Schlüssel ist gültig und funktioniert korrekt.",
+      "api_key_invalid": "Der API-Schlüssel scheint ungültig zu sein:"
     },
     "language": {
       "select_language": "Sprache auswählen",
@@ -55,8 +93,12 @@
       "never": "Nie"
     },
     "about": {
+      "title": "Über KI-Prompt-Assistent",
       "version": "Version",
-      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "description": "Eine Menüleisten-Anwendung, die Ihnen hilft, bessere KI-Prompts zu erstellen.",
+      "copyright": "2025 Raspiska Tech & Consultancy",
+      "credits": "Erstellt mit ❤️",
+      "close": "Schließen",
       "website": "Webseite",
       "website_url": "https://raspiska.co"
     }

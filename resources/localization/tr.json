@@ -3,10 +3,27 @@
     "name": "AI Prompt Asistanı",
     "version": "0.1.0"
   },
+  "api": {
+    "missing_key": {
+      "title": "API Anahtarı Eksik",
+      "message": "OpenAI API anahtarı bulunamadı. Lütfen API anahtarınızı Ayarlar'dan ekleyin."
+    },
+    "error": {
+      "title": "API Hatası",
+      "message": "İstek yeniden düzenlenirken hata oluştu:"
+    },
+    "success": {
+      "title": "İstek Yeniden Düzenlendi",
+      "message": "İsteğiniz başarıyla yeniden düzenlendi ve tarayıcıya gönderildi."
+    }
+  },
   "menubar": {
     "open_input": "Giriş Aç",
+    "history": "Geçmiş",
     "settings": "Ayarlar",
     "check_updates": "Güncellemeleri Kontrol Et",
+    "accessibility": "Erişilebilirlik Ayarları",
+    "about": "Hakkında",
     "quit": "Çıkış"
   },
   "input_dialog": {
@@ -32,13 +49,34 @@
     "history": {
       "clear_history": "Giriş Geçmişini Temizle",
       "confirm_clear": "Tüm giriş geçmişini temizlemek istediğinizden emin misiniz?",
-      "no_history": "Giriş geçmişi bulunamadı"
+      "no_history": "Giriş geçmişi bulunamadı",
+      "dialog_title": "Prompt Geçmişi",
+      "date_column": "Tarih",
+      "prompt_column": "Prompt",
+      "service_column": "AI Servisi",
+      "preview_label": "Önizleme:",
+      "reuse_button": "Promptu Yeniden Kullan",
+      "delete_button": "Sil",
+      "clear_all_button": "Tümünü Temizle",
+      "close_button": "Kapat",
+      "confirm_delete": "Bu promptu silmek istediğinizden emin misiniz?",
+      "confirm_clear_all": "Geçmişteki TÜM promptları silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
     },
     "ai": {
       "select_service": "AI Servisi Seçin",
       "chatgpt": "ChatGPT",
       "bard": "Google Bard",
-      "claude": "Claude"
+      "claude": "Claude",
+      "api_key": "API Anahtarı",
+      "openai_api_key": "OpenAI API Anahtarı:",
+      "api_key_saved": "API anahtarı başarıyla kaydedildi",
+      "test_api_key": "Anahtarı Test Et",
+      "testing": "Test Ediliyor...",
+      "api_key_error": "API Anahtarı Hatası",
+      "api_key_empty": "Lütfen test etmek için bir API anahtarı girin.",
+      "api_key_valid": "API Anahtarı Geçerli",
+      "api_key_success": "API anahtarı geçerli ve düzgün çalışıyor.",
+      "api_key_invalid": "API anahtarı geçersiz görünüyor:"
     },
     "language": {
       "select_language": "Dil Seçin",
@@ -55,8 +93,12 @@
       "never": "Hiç"
     },
     "about": {
+      "title": "AI Prompt Asistanı Hakkında",
       "version": "Sürüm",
-      "copyright": "© 2025 Raspiska Tech & Consultancy",
+      "description": "Daha iyi AI promptları oluşturmanıza yardımcı olan bir menü çubuğu uygulaması.",
+      "copyright": "2025 Raspiska Tech & Consultancy",
+      "credits": "❤️ ile oluşturuldu",
+      "close": "Kapat",
       "website": "Web Sitesi",
       "website_url": "https://raspiska.co"
     }

@@ -66,16 +66,28 @@ A macOS menubar application that enhances your AI interactions by optimizing pro
 4. Click "Ask" or press Enter
 5. Your optimized prompt will be sent to your selected AI service in your default browser
 
+### API Key Setup
+
+1. Click on the AI Prompt Assistant icon in your menubar
+2. Select "Settings"
+3. Go to the "AI Selection" tab
+4. Enter your OpenAI API key in the provided field
+5. Click "Test Key" to verify your API key works correctly
+6. Click "OK" to save your settings
+
+Your API key will be securely stored in your system's keychain and will be used for prompt optimization.
+
 ### Settings
 
 Access settings by clicking on the menubar icon and selecting "Settings":
 
 - **Keyboard Shortcut**: Change the default shortcut
 - **Input History**: View and manage your previous prompts
-- **AI Selection**: Choose your preferred AI service
+- **AI Selection**: Choose your preferred AI service and set up your OpenAI API key
 - **Language**: Change the application language
 - **Startup**: Configure the app to launch at login
 - **Updates**: Check for updates or enable automatic update checks
+- **About**: View application information, version, and credits
 
 ## Building from Source
 
