@@ -103,6 +103,23 @@
       "website_url": "https://raspiska.co"
     }
   },
+  "preview": {
+    "title": "Förhandsvisning",
+    "mode": "Läge:",
+    "mode.baseline": "baseline",
+    "mode.optimized": "optimized",
+    "send": "Skicka  ⌘↩",
+    "cancel": "Avbryt  Esc"
+  },
+  "svc_model": {
+    "title": "Tjänst & Modell",
+    "search_placeholder": "Sök tjänster/modeller",
+    "edit_pricing": "Redigera pricing.json…"
+  },
+  "common": {
+    "save": "Spara",
+    "cancel": "Avbryt"
+  },
   "notifications": {
     "copied": "Kopierad till urklipp",
     "update_available": "Uppdatering tillgänglig",

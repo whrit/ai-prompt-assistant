@@ -3,6 +3,23 @@
     "name": "AI Prompt Assistant",
     "version": "0.1.0"
   },
+  "preview": {
+    "title": "Preview",
+    "mode": "Mode:",
+    "mode.baseline": "baseline",
+    "mode.optimized": "optimized",
+    "send": "Send  ⌘↩",
+    "cancel": "Cancel  Esc"
+  },
+  "svc_model": {
+    "title": "Service & Model",
+    "search_placeholder": "Search services/models",
+    "edit_pricing": "Edit pricing.json…"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
   "api": {
     "missing_key": {
       "title": "API Key Missing",

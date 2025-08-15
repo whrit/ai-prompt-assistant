@@ -103,6 +103,23 @@
       "website_url": "https://raspiska.co"
     }
   },
+  "preview": {
+    "title": "Vorschau",
+    "mode": "Modus:",
+    "mode.baseline": "baseline",
+    "mode.optimized": "optimized",
+    "send": "Senden  ⌘↩",
+    "cancel": "Abbrechen  Esc"
+  },
+  "svc_model": {
+    "title": "Dienst & Modell",
+    "search_placeholder": "Dienste/Modelle suchen",
+    "edit_pricing": "pricing.json bearbeiten…"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
   "notifications": {
     "copied": "In die Zwischenablage kopiert",
     "update_available": "Update verfügbar",

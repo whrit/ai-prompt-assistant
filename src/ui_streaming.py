@@ -3,7 +3,7 @@ import time, threading
 from typing import Callable
 from AppKit import (
     NSPopover, NSView, NSMakeRect, NSScrollView, NSTextView,
-    NSButton, NSTextField, NSApp
+    NSButton, NSTextField, NSApp, NSProgressIndicator, NSProgressIndicatorSpinningStyle, NSFont
 )
 from Foundation import NSObject, NSTimer
 import objc
@@ -34,7 +34,11 @@ class StreamingPopover:
         self.pop.setBehavior_(1)  # NSPopoverBehaviorTransient
         self.view = NSView.alloc().initWithFrame_(NSMakeRect(0, 0, 520, 240))
 
-        self.view.addSubview_(_label(NSMakeRect(10, 214, 500, 18), "Streaming…"))
+        self.view.addSubview_(_label(NSMakeRect(30, 214, 480, 18), "Streaming…"))
+        self.spinner = NSProgressIndicator.alloc().initWithFrame_(NSMakeRect(10, 210, 16, 16))
+        self.spinner.setStyle_(NSProgressIndicatorSpinningStyle)
+        self.spinner.setDisplayedWhenStopped_(False)
+        self.view.addSubview_(self.spinner)
         self.status = _label(NSMakeRect(10, 190, 500, 16), "0 tokens • 0.0s")
         self.view.addSubview_(self.status)
 
@@ -42,6 +46,7 @@ class StreamingPopover:
         self.scroll.setHasVerticalScroller_(True)
         self.text = NSTextView.alloc().initWithFrame_(NSMakeRect(0, 0, 500, 145))
         self.text.setEditable_(False); self.text.setRichText_(False)
+        self.text.setFont_(NSFont.monospacedSystemFontOfSize_weight_(12, 0))
         self.scroll.setDocumentView_(self.text)
         self.view.addSubview_(self.scroll)
 
@@ -53,6 +58,10 @@ class StreamingPopover:
         self.btnCopy = NSButton.alloc().initWithFrame_(NSMakeRect(180, 10, 120, 24))
         self.btnCopy.setTitle_("Copy")
         self.view.addSubview_(self.btnCopy)
+
+        self.btnStop = NSButton.alloc().initWithFrame_(NSMakeRect(310, 10, 80, 24))
+        self.btnStop.setTitle_("Stop")
+        self.view.addSubview_(self.btnStop)
 
         self.pop.setContentViewController_(None)
         self.pop.setContentSize_((520, 240))
@@ -91,22 +100,45 @@ class StreamingPopover:
         # Timer to update status
         streamer = _Streamer.alloc().initWith_(self._update_status)
         self._timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.2, streamer, "tick:", None, True)
+        self.spinner.startAnimation_(None)
 
         def _bg():
+            stopped = {"v": False}
             try:
-                for piece in stream_completion(provider, model, prompt):
+                def _stop():
+                    return stopped["v"]
+                for piece in stream_completion(provider, model, prompt, _stop):
                     if not piece: 
                         continue
                     self._accum.append(piece)
                     self._tokens += 1
                     # Update text on main thread
                     self.text.performSelectorOnMainThread_withObject_waitUntilDone_("setString:", "".join(self._accum), False)
+                    # Autoscroll to bottom
+                    self.text.performSelectorOnMainThread_withObject_waitUntilDone_("scrollRangeToVisible:", (len("".join(self._accum))-1, 0), False)
             finally:
                 self._done = True
                 elapsed = time.time() - self._start if self._start else 0.0
                 _update_latency_ema(provider, model, elapsed)
                 self.btnInsert.performSelectorOnMainThread_withObject_waitUntilDone_("setEnabled:", True, False)
+                self.spinner.performSelectorOnMainThread_withObject_waitUntilDone_("stopAnimation:", None, False)
         threading.Thread(target=_bg, daemon=True).start()
+
+        # Wire actions
+        def _copy(_):
+            from AppKit import NSPasteboard, NSStringPboardType
+            pb = NSPasteboard.generalPasteboard()
+            pb.clearContents()
+            pb.setString_forType_("".join(self._accum), NSStringPboardType)
+            self.btnCopy.setTitle_("Copied ✓")
+        self.btnCopy.setTarget_(self); self.btnCopy.setAction_("doCopy:")
+        self.doCopy_ = _copy
+
+        def _stop(_):
+            stopped["v"] = True
+        self.btnStop.setTarget_(self); self.btnStop.setAction_("doStop:")
+        self.doStop_ = _stop
+        self.btnInsert.setTarget_(self); self.btnInsert.setAction_("doInsert:")
 
     def _update_status(self):
         elapsed = (time.time() - self._start) if self._start else 0.0

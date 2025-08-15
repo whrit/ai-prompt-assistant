@@ -1,17 +1,21 @@
 import rumps
 from AppKit import NSApp
+from Foundation import NSTimer
 try:
     from AppKit import NSRunningApplication, NSApplicationActivateIgnoringOtherApps
 except Exception:
     NSRunningApplication = None  # type: ignore
     NSApplicationActivateIgnoringOtherApps = 1  # type: ignore
 from .storage import load_config, save_config, add_favorite, remove_favorite
+from .debugging import setup_debugging, log_debug, log_error, log_exception
 from .clipboard import read_clipboard_text
 from .selection import get_selected_text_if_any, ensure_accessibility_trust
 from .redaction import redact
 from .templates import TEMPLATES
 from .prompt_optimizer import optimize
-from .ui_alerts import show_preview_dialog, show_ask_dialog
+from .ui_panels import PreviewPanel, HostWindow
+from .ui_ask import AskPopover
+from .ui_menus import ensure_edit_menu
 from .ui_service_model import show_service_model_dialog
 from .ui_streaming import StreamingPopover
 from .services import (
@@ -43,8 +47,14 @@ def _activate_app():
 class AIPromptAssistant(rumps.App):
     def __init__(self):
         super().__init__(APP_TITLE, icon=None, template=True)
+        setup_debugging(True)
         # Disable rumps' default Quit to avoid duplicates; we'll add our own
         self.quit_button = None
+        # Ensure standard Edit actions are available
+        try:
+            ensure_edit_menu()
+        except Exception:
+            pass
         self.menu = [
             rumps.MenuItem("Ask…", callback=self.ask_dialog),
             rumps.MenuItem("Templates…", callback=self.templates_dialog),
@@ -58,6 +68,9 @@ class AIPromptAssistant(rumps.App):
             rumps.MenuItem("Quit", callback=rumps.quit_application),
         ]
         self.cfg = load_config()
+        self._ask_pop: AskPopover | None = None
+        self._ask_anchor_rect = None
+        self._ask_anchor_view = None
 
     # ---- Manage Pricing ----
     def manage_pricing(self, _):
@@ -107,12 +120,54 @@ class AIPromptAssistant(rumps.App):
         # Ensure our app is active so the window is front and editable
         _activate_app()
         # Prefer AX selection if available; prompt the user once to allow it.
-        ensure_accessibility_trust(prompt_user=True)
+        try:
+            ensure_accessibility_trust(prompt_user=True)
+        except Exception:
+            log_exception("ensure_accessibility_trust")
         text = get_selected_text_if_any(prompt_user=False) or read_clipboard_text()
+        # Build or reuse Ask popover
+        if self._ask_pop is None:
+            def _estimate(txt: str):
+                provider = self.cfg.get("service", "chatgpt_web")
+                model = self.cfg.get("model", "web")
+                cost, lat = estimate_cost_and_latency(txt, provider, model)
+                from .services import token_estimate
+                return cost, lat, token_estimate(txt)
+            self._ask_pop = AskPopover.alloc().initWithEstimator_(_estimate)
+        self._ask_pop.set_text(text or "")
+        try:
+            status_btn = self._menu_bar.statusitem.button()
+        except Exception:
+            status_btn = NSApp().mainWindow()
+        self._ask_pop.set_handlers(
+            lambda: self._after_ask(self._ask_pop.text.string() or ""),
+            lambda: self._ask_pop.close(),
+        )
+        # Prefer anchoring to the button's bounds if available; present after menu closes
+        try:
+            rect = status_btn.bounds() if status_btn else ((0,0),(1,1))
+        except Exception:
+            rect = ((0,0),(1,1))
+        self._ask_anchor_rect = rect
+        self._ask_anchor_view = status_btn
+        log_debug("Scheduling Ask popover", rect=self._ask_anchor_rect)
+        NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(0.05, self, "presentAsk:", None, False)
+        return
 
-        ok_ask, raw_text = show_ask_dialog(text)
-        if not ok_ask:
-            return
+    def presentAsk_(self, _):
+        try:
+            rect = self._ask_anchor_rect or ((0,0),(1,1))
+            view = self._ask_anchor_view
+            self._ask_pop.presentAnchored_to_preferredEdge_(rect, view, 1)
+        except Exception:
+            log_exception("presentAsk_")
+        finally:
+            self._ask_anchor_rect = None
+            self._ask_anchor_view = None
+
+    def _after_ask(self, raw_text: str):
+        # Called after Ask popover Preview
+        self._ask_pop.close()
 
         # Redaction pass (visible)
         redacted, count = (raw_text, 0)
@@ -129,14 +184,31 @@ class AIPromptAssistant(rumps.App):
         mode = self.cfg.get("ab_choice", {}).get("adhoc", "optimized")
         preview_text = optimize(redacted, mode)
 
-        ok, final_text, selected_mode = show_preview_dialog(
-            initial_text=preview_text,
-            redactions_count=count,
-            initial_mode=mode,
-            estimate_line=est_line,
-        )
-        if not ok:
+        # Use PreviewPanel as a sheet-like modal via an invisible host window
+        host = HostWindow.alloc().init()
+        host.show()
+        panel = PreviewPanel.alloc().init()
+        panel.buildWith_initialText_initialMode_(est_line, preview_text, mode)
+        result = {"ok": False, "text": preview_text, "mode": mode}
+        def _send(txt: str):
+            result["ok"] = True
+            result["text"] = txt
+            result["mode"] = panel.selected_mode()
+            panel.close(); host.close()
+        def _cancel():
+            result["ok"] = False
+            panel.close(); host.close()
+        panel.set_handlers(_send, _cancel)
+        panel.show()
+        # Let the runloop process while waiting for handlers; avoid hard spin waits
+        import time
+        t0 = time.time()
+        while panel.win.isVisible() and (time.time() - t0) < 30:
+            time.sleep(0.02)
+        if not result["ok"]:
             return
+        final_text = result["text"]
+        selected_mode = result["mode"]
 
         # Persist A/B choice (already there)
         self.cfg.setdefault("ab_choice", {})["adhoc"] = selected_mode
@@ -183,18 +255,26 @@ class AIPromptAssistant(rumps.App):
             def on_insert(result_text: str):
                 # Re-open Preview with assistant text appended, so user can edit/accept
                 combined = final_text + "\n\n---\nAssistant:\n" + result_text
-                ok2, edited, _mode2 = show_preview_dialog(
-                    initial_text=combined,
-                    redactions_count=0,
-                    initial_mode=selected_mode,
-                    estimate_line=est_line,
-                )
-                if ok2 and edited:
+                host2 = HostWindow.alloc().init(); host2.show()
+                panel2 = PreviewPanel.alloc().init()
+                panel2.buildWith_initialText_initialMode_(est_line, combined, selected_mode)
+                res2 = {"ok": False, "text": combined}
+                def _send2(txt: str):
+                    res2["ok"] = True; res2["text"] = txt
+                    panel2.close(); host2.close()
+                def _cancel2():
+                    res2["ok"] = False; panel2.close(); host2.close()
+                panel2.set_handlers(_send2, _cancel2)
+                panel2.show()
+                import time
+                while panel2.win.isVisible():
+                    time.sleep(0.05)
+                if res2["ok"] and res2["text"]:
                     # copy to clipboard and notify
                     import subprocess
 
                     try:
-                        subprocess.run(["/usr/bin/pbcopy"], input=edited.encode("utf-8"))
+                        subprocess.run(["/usr/bin/pbcopy"], input=res2["text"].encode("utf-8"))
                     except Exception:
                         pass
                     rumps.notification(
@@ -202,7 +282,7 @@ class AIPromptAssistant(rumps.App):
                     )
                     # Ask to favorite the edited text
                     if rumps.alert("Add to Favorites?", ok="Yes", cancel="No") == 1:
-                        default_name = (edited.strip()[:40] or "Ad hoc prompt").replace("\n", " ")
+                        default_name = (res2["text"].strip()[:40] or "Ad hoc prompt").replace("\n", " ")
                         name_win = rumps.Window(
                             title="Save Favorite",
                             message="Name this favorite:",
@@ -212,7 +292,7 @@ class AIPromptAssistant(rumps.App):
                         )
                         res2 = name_win.run()
                         if res2.clicked:
-                            add_favorite(res2.text.strip() or default_name, edited)
+                            add_favorite(res2.text.strip() or default_name, res2["text"])
 
             def on_copy(_result_text: str):
                 # handled inside popover; no-op here
@@ -266,14 +346,20 @@ class AIPromptAssistant(rumps.App):
         est_line = f"Using {provider}/{model} — est. cost ${cost} • ~{latency}s"
 
         preview = optimize(base, mode)
-        ok, final_text, selected_mode = show_preview_dialog(
-            initial_text=preview,
-            redactions_count=0,
-            initial_mode=mode,
-            estimate_line=est_line,
-        )
-        if not ok:
+        host = HostWindow.alloc().init(); host.show()
+        panel = PreviewPanel.alloc().init(); panel.buildWith_initialText_initialMode_(est_line, preview, mode)
+        res = {"ok": False, "text": preview, "mode": mode}
+        def _send(txt: str):
+            res["ok"] = True; res["text"] = txt; res["mode"] = panel.selected_mode(); panel.close(); host.close()
+        def _cancel():
+            res["ok"] = False; panel.close(); host.close()
+        panel.set_handlers(_send, _cancel); panel.show()
+        import time
+        while panel.win.isVisible():
+            time.sleep(0.05)
+        if not res["ok"]:
             return
+        final_text = res["text"]; selected_mode = res["mode"]
 
         # Persist per-template A/B choice
         self.cfg.setdefault("ab_choice", {})[t["key"]] = selected_mode
@@ -307,17 +393,22 @@ class AIPromptAssistant(rumps.App):
 
             def on_insert(result_text: str):
                 combined = final_text + "\n\n---\nAssistant:\n" + result_text
-                ok2, edited, _mode2 = show_preview_dialog(
-                    initial_text=combined,
-                    redactions_count=0,
-                    initial_mode=selected_mode,
-                    estimate_line=est_line,
-                )
-                if ok2 and edited:
+                host2 = HostWindow.alloc().init(); host2.show()
+                panel2 = PreviewPanel.alloc().init(); panel2.buildWith_initialText_initialMode_(est_line, combined, selected_mode)
+                r2 = {"ok": False, "text": combined}
+                def _send2(txt: str):
+                    r2["ok"] = True; r2["text"] = txt; panel2.close(); host2.close()
+                def _cancel2():
+                    r2["ok"] = False; panel2.close(); host2.close()
+                panel2.set_handlers(_send2, _cancel2); panel2.show()
+                import time
+                while panel2.win.isVisible():
+                    time.sleep(0.05)
+                if r2["ok"] and r2["text"]:
                     import subprocess
 
                     try:
-                        subprocess.run(["/usr/bin/pbcopy"], input=edited.encode("utf-8"))
+                        subprocess.run(["/usr/bin/pbcopy"], input=r2["text"].encode("utf-8"))
                     except Exception:
                         pass
                     rumps.notification(
@@ -325,7 +416,7 @@ class AIPromptAssistant(rumps.App):
                     )
                     # Offer to favorite the final edited template output
                     if rumps.alert("Add to Favorites?", ok="Yes", cancel="No") == 1:
-                        add_favorite(t["name"], edited)
+                        add_favorite(t["name"], r2["text"])
 
             def on_copy(_result_text: str):
                 pass

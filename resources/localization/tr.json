@@ -103,6 +103,23 @@
       "website_url": "https://raspiska.co"
     }
   },
+  "preview": {
+    "title": "Önizleme",
+    "mode": "Mod:",
+    "mode.baseline": "baseline",
+    "mode.optimized": "optimized",
+    "send": "Gönder  ⌘↩",
+    "cancel": "İptal  Esc"
+  },
+  "svc_model": {
+    "title": "Servis & Model",
+    "search_placeholder": "Servis/model ara",
+    "edit_pricing": "pricing.json düzenle…"
+  },
+  "common": {
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
   "notifications": {
     "copied": "Panoya kopyalandı",
     "update_available": "Güncelleme Mevcut",

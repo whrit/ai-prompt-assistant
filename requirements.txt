@@ -6,4 +6,4 @@ pyobjc
 pyobjc-framework-Cocoa
 pyobjc-framework-Quartz
 pyobjc-framework-ApplicationServices
-py2app>=0.28.6
+py2app

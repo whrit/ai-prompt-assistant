@@ -3,6 +3,23 @@
     "name": "Asistente de Prompts IA",
     "version": "0.1.0"
   },
+  "preview": {
+    "title": "Vista previa",
+    "mode": "Modo:",
+    "mode.baseline": "baseline",
+    "mode.optimized": "optimized",
+    "send": "Enviar  ⌘↩",
+    "cancel": "Cancelar  Esc"
+  },
+  "svc_model": {
+    "title": "Servicio y Modelo",
+    "search_placeholder": "Buscar servicios/modelos",
+    "edit_pricing": "Editar pricing.json…"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
   "api": {
     "missing_key": {
       "title": "Falta Clave API",

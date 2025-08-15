@@ -2,7 +2,7 @@
 import time
 import json
 import requests
-from typing import Dict, Tuple, Iterable
+from typing import Dict, Tuple, Iterable, Callable, Optional
 from .storage import load_config, save_config
 from .pricing import load_pricing
 
@@ -75,13 +75,19 @@ def _update_latency_ema(provider: str, model: str, observed_seconds: float, alph
     save_config(cfg)
 
 # ---------- Streaming ----------
-def _openai_stream(prompt: str, model: str, api_key: str) -> Iterable[str]:
+def _openai_stream(prompt: str, model: str, api_key: str, stop_fn: Optional[Callable[[], bool]] = None) -> Iterable[str]:
     url = "https://api.openai.com/v1/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}"}
     body = {"model": model, "messages": [{"role": "user", "content": prompt}], "stream": True, "max_tokens": 800}
     with requests.post(url, headers=headers, json=body, stream=True, timeout=300) as r:
         r.raise_for_status()
         for line in r.iter_lines(decode_unicode=True):
+            if stop_fn and stop_fn():
+                try:
+                    r.close()
+                except Exception:
+                    pass
+                break
             if not line or not line.startswith("data:"): 
                 continue
             if line.strip() == "data: [DONE]":
@@ -94,7 +100,7 @@ def _openai_stream(prompt: str, model: str, api_key: str) -> Iterable[str]:
             except Exception:
                 continue
 
-def _anthropic_stream(prompt: str, model: str, api_key: str) -> Iterable[str]:
+def _anthropic_stream(prompt: str, model: str, api_key: str, stop_fn: Optional[Callable[[], bool]] = None) -> Iterable[str]:
     url = "https://api.anthropic.com/v1/messages"
     headers = {
         "x-api-key": api_key,
@@ -105,6 +111,12 @@ def _anthropic_stream(prompt: str, model: str, api_key: str) -> Iterable[str]:
     with requests.post(url, headers=headers, json=body, stream=True, timeout=300) as r:
         r.raise_for_status()
         for line in r.iter_lines(decode_unicode=True):
+            if stop_fn and stop_fn():
+                try:
+                    r.close()
+                except Exception:
+                    pass
+                break
             if not line or not line.startswith("data:"):
                 continue
             try:
@@ -121,11 +133,17 @@ def _anthropic_stream(prompt: str, model: str, api_key: str) -> Iterable[str]:
             except Exception:
                 continue
 
-def _ollama_stream(prompt: str, model: str, base_url: str) -> Iterable[str]:
+def _ollama_stream(prompt: str, model: str, base_url: str, stop_fn: Optional[Callable[[], bool]] = None) -> Iterable[str]:
     url = base_url.rstrip("/") + "/api/generate"
     with requests.post(url, json={"model": model, "prompt": prompt, "stream": True}, stream=True, timeout=300) as r:
         r.raise_for_status()
         for line in r.iter_lines(decode_unicode=True):
+            if stop_fn and stop_fn():
+                try:
+                    r.close()
+                except Exception:
+                    pass
+                break
             if not line:
                 continue
             try:
@@ -136,16 +154,16 @@ def _ollama_stream(prompt: str, model: str, base_url: str) -> Iterable[str]:
             except Exception:
                 continue
 
-def stream_completion(provider: str, model: str, prompt: str) -> Iterable[str]:
+def stream_completion(provider: str, model: str, prompt: str, stop_fn: Optional[Callable[[], bool]] = None) -> Iterable[str]:
     cfg = load_config()
     keys = cfg.get("api_keys", {})
     if provider == "openai" and "openai" in keys:
-        return _openai_stream(prompt, model, keys["openai"])
+        return _openai_stream(prompt, model, keys["openai"], stop_fn)
     if provider == "anthropic" and "anthropic" in keys:
-        return _anthropic_stream(prompt, model, keys["anthropic"])
+        return _anthropic_stream(prompt, model, keys["anthropic"], stop_fn)
     if provider == "ollama":
         base = keys.get("ollama_url", "http://localhost:11434")
-        return _ollama_stream(prompt, model, base)
+        return _ollama_stream(prompt, model, base, stop_fn)
     # No streaming available → empty generator
     def _empty():
         if False: yield ""  # pragma: no cover

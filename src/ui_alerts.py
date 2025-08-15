@@ -58,6 +58,16 @@ def show_preview_dialog(
     text_view.setString_(initial_text)
     text_view.setEditable_(True)
     text_view.setRichText_(False)
+    # Simple redaction highlighting (matches our replacements)
+    try:
+        s = text_view.string() or ""
+        ns = text_view.textStorage()
+        import re
+        for pat in (re.compile("\\[REDACTED:email\\]"), re.compile("\\[REDACTED:phone\\]"), re.compile("\\[REDACTED:key\\]"), re.compile("\\[REDACTED:param\\]")):
+            for m in pat.finditer(s):
+                ns.addAttribute_value_range_("NSBackgroundColor", (0.9,0.8,0.2,0.3), (m.start(), m.end()-m.start()))
+    except Exception:
+        pass
     scroll.setDocumentView_(text_view)
     acc.addSubview_(scroll)
 
