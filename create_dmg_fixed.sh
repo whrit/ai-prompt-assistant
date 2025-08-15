@@ -27,7 +27,7 @@ rm -f "${DMG_NAME}"
 echo "Creating DMG using create-dmg..."
 create-dmg \
     --volname "AI Prompt Assistant" \
-    --volicon "resources/icons/menubar_icon.icns" \
+    --volicon "resources/icons/menubar_icon.png" \
     --window-pos 200 120 \
     --window-size 800 400 \
     --icon-size 100 \

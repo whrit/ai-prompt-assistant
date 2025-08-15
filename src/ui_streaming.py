@@ -3,14 +3,15 @@ import time, threading
 from typing import Callable
 from AppKit import (
     NSPopover, NSView, NSMakeRect, NSScrollView, NSTextView,
-    NSButton, NSTextField
+    NSButton, NSTextField, NSApp
 )
 from Foundation import NSObject, NSTimer
+import objc
 from .services import stream_completion, _update_latency_ema
 
 class _Streamer(NSObject):
     def initWith_(self, update_fn):
-        self = super().init()
+        self = objc.super(_Streamer, self).init()
         if self is None: return None
         self.update_fn = update_fn
         return self
@@ -64,6 +65,10 @@ class StreamingPopover:
 
     def show(self, status_item_button):
         # Anchor to the status item button
+        try:
+            NSApp().activateIgnoringOtherApps_(True)
+        except Exception:
+            pass
         self.pop.showRelativeToRect_ofView_preferredEdge_(((0,0),(0,0)), status_item_button, 3)
 
     def set_handlers(self, on_insert: Callable[[str], None], on_copy: Callable[[str], None]):

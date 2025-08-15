@@ -2,7 +2,7 @@
 from typing import Tuple
 from AppKit import (
     NSAlert, NSView, NSTextView, NSScrollView, NSMakeRect,
-    NSPopUpButton, NSTextField
+    NSPopUpButton, NSTextField, NSApp, NSWindow
 )
 
 OK_RETURN = 1000  # NSAlertFirstButtonReturn
@@ -62,6 +62,13 @@ def show_preview_dialog(
     acc.addSubview_(scroll)
 
     alert.setAccessoryView_(acc)
+    # Ensure alert becomes key and frontmost
+    try:
+        app = NSApp()
+        if app:
+            app.activateIgnoringOtherApps_(True)
+    except Exception:
+        pass
     res = alert.runModal()
 
     if res != OK_RETURN:
@@ -70,3 +77,48 @@ def show_preview_dialog(
     final_text = text_view.string()
     selected_mode = mode_popup.titleOfSelectedItem()
     return True, final_text, selected_mode
+
+
+def show_ask_dialog(initial_text: str) -> Tuple[bool, str]:
+    """Ask input dialog using NSAlert with an editable text view.
+
+    Returns (clicked_ok, text)
+    """
+    alert = NSAlert.alloc().init()
+    alert.setMessageText_("Ask")
+    alert.setInformativeText_("Type your prompt or use current selection/clipboard.")
+    alert.addButtonWithTitle_("Preview")
+    alert.addButtonWithTitle_("Cancel")
+
+    width, height = 520, 220
+    acc = NSView.alloc().initWithFrame_(NSMakeRect(0, 0, width, height))
+
+    scroll = NSScrollView.alloc().initWithFrame_(NSMakeRect(0, 0, width, height))
+    scroll.setHasVerticalScroller_(True)
+    text_view = NSTextView.alloc().initWithFrame_(NSMakeRect(0, 0, width, height))
+    text_view.setString_(initial_text)
+    text_view.setEditable_(True)
+    text_view.setRichText_(False)
+    scroll.setDocumentView_(text_view)
+    acc.addSubview_(scroll)
+
+    alert.setAccessoryView_(acc)
+    try:
+        app = NSApp()
+        if app:
+            app.activateIgnoringOtherApps_(True)
+            # Try to raise and focus the alert and text view before running
+            win = alert.window()
+            if win:
+                try:
+                    win.makeKeyAndOrderFront_(None)
+                    win.makeFirstResponder_(text_view)
+                except Exception:
+                    pass
+    except Exception:
+        pass
+
+    res = alert.runModal()
+    if res != OK_RETURN:
+        return False, initial_text
+    return True, text_view.string()

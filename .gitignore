@@ -65,3 +65,11 @@ Icon
 # Keychain / sensitive data
 *.keychain
 *.key
+
+.mcp-cache/
+CLAUDE.md
+__pycache__/
+.claude/
+.venv/
+.DS_Store
+.DS_Store

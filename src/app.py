@@ -1,12 +1,17 @@
 import rumps
 from AppKit import NSApp
+try:
+    from AppKit import NSRunningApplication, NSApplicationActivateIgnoringOtherApps
+except Exception:
+    NSRunningApplication = None  # type: ignore
+    NSApplicationActivateIgnoringOtherApps = 1  # type: ignore
 from .storage import load_config, save_config, add_favorite, remove_favorite
 from .clipboard import read_clipboard_text
 from .selection import get_selected_text_if_any, ensure_accessibility_trust
 from .redaction import redact
 from .templates import TEMPLATES
 from .prompt_optimizer import optimize
-from .ui_alerts import show_preview_dialog
+from .ui_alerts import show_preview_dialog, show_ask_dialog
 from .ui_service_model import show_service_model_dialog
 from .ui_streaming import StreamingPopover
 from .services import (
@@ -21,11 +26,27 @@ from .pricing import PRICING_PATH, ensure_pricing_file
 APP_TITLE = "AI Prompt Assistant"
 
 
+def _activate_app():
+    """Bring this agent app to the front so dialogs get focus."""
+    try:
+        if NSRunningApplication is not None:
+            NSRunningApplication.currentApplication().activateWithOptions_(NSApplicationActivateIgnoringOtherApps)
+            return
+    except Exception:
+        pass
+    try:
+        NSApp().activateIgnoringOtherApps_(True)
+    except Exception:
+        pass
+
+
 class AIPromptAssistant(rumps.App):
     def __init__(self):
         super().__init__(APP_TITLE, icon=None, template=True)
+        # Disable rumps' default Quit to avoid duplicates; we'll add our own
+        self.quit_button = None
         self.menu = [
-            rumps.MenuItem("Ask…", key="@", callback=self.ask_dialog),
+            rumps.MenuItem("Ask…", callback=self.ask_dialog),
             rumps.MenuItem("Templates…", callback=self.templates_dialog),
             rumps.MenuItem("Favorites…", callback=self.favorites_dialog),
             None,
@@ -83,21 +104,15 @@ class AIPromptAssistant(rumps.App):
 
     # ---- Core Ask flow ----
     def ask_dialog(self, _):
+        # Ensure our app is active so the window is front and editable
+        _activate_app()
         # Prefer AX selection if available; prompt the user once to allow it.
         ensure_accessibility_trust(prompt_user=True)
         text = get_selected_text_if_any(prompt_user=False) or read_clipboard_text()
 
-        w = rumps.Window(
-            title="Ask",
-            message="Type your prompt or use current selection/clipboard.",
-            default_text=text,
-            ok="Preview",
-            cancel=True,
-        )
-        btn = w.run()
-        if not btn.clicked:
+        ok_ask, raw_text = show_ask_dialog(text)
+        if not ok_ask:
             return
-        raw_text = btn.text or ""
 
         # Redaction pass (visible)
         redacted, count = (raw_text, 0)

@@ -4,6 +4,7 @@ from AppKit import (
     NSAlert, NSView, NSPopUpButton, NSTextField, NSMakeRect
 )
 from Foundation import NSObject
+import objc
 from .services import list_services_models
 
 OK_RETURN = 1000
@@ -16,7 +17,7 @@ def _label(frame, text):
 
 class _Controller(NSObject):
     def initWithMaps_(self, model_map):
-        self = super().init()
+        self = objc.super(_Controller, self).init()
         if self is None: return None
         self.model_map = model_map
         self.servicePopup = None
