@@ -7,8 +7,6 @@ Handles loading, saving, and accessing application settings.
 import os
 import json
 import keyring
-from pathlib import Path
-import locale
 
 
 class SettingsManager:

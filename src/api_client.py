@@ -5,7 +5,6 @@ Handles communication with the rephrasing API.
 """
 
 import requests
-import json
 import urllib.parse
 import os
 from src.history_manager import HistoryManager

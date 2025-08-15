@@ -1,6 +1,9 @@
-rumps==0.4.0
-PyQt6==6.5.0
-requests==2.28.2
-keyring==23.13.1
+rumps
+requests
+keyring
+pynput
+pyobjc
+pyobjc-framework-Cocoa
+pyobjc-framework-Quartz
+pyobjc-framework-ApplicationServices
 py2app>=0.28.6
-pynput==1.7.6

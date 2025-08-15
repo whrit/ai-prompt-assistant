@@ -1,10 +1,14 @@
 """
 Setup script for packaging AI Prompt Assistant with py2app.
+
+This targets the rumps-based implementation (`src/app.py`) via `run_app.py`.
 """
 
 from setuptools import setup
 
-APP = ['src/main.py']
+# Use the wrapper so imports resolve correctly and we target the rumps app
+APP = ['run_app.py']
+
 DATA_FILES = [
     ('resources/icons', ['resources/icons/menubar_icon.png']),
     ('resources/localization', [
@@ -12,13 +16,14 @@ DATA_FILES = [
         'resources/localization/es.json',
         'resources/localization/de.json',
         'resources/localization/sv.json',
-        'resources/localization/tr.json'
-    ])
+        'resources/localization/tr.json',
+    ]),
 ]
+
 OPTIONS = {
     'argv_emulation': True,
     'plist': {
-        'LSUIElement': True,  # This makes it a menubar app without dock icon
+        'LSUIElement': True,  # menubar app (no Dock icon)
         'CFBundleName': 'AI Prompt Assistant',
         'CFBundleDisplayName': 'AI Prompt Assistant',
         'CFBundleIdentifier': 'co.raspiska.aipromptassistant',
@@ -26,8 +31,11 @@ OPTIONS = {
         'CFBundleShortVersionString': '0.1.0',
         'NSHumanReadableCopyright': '© 2025 Raspiska Tech & Consultancy',
     },
-    'packages': ['rumps', 'PyQt6', 'pynput'],
-    'includes': ['keyring', 'requests', 'sqlite3', 'webbrowser', 'json', 'os', 'sys'],
+    # Force-include modules used by the rumps + PyObjC stack and zlib.
+    # Including zlib helps avoid environments where it might otherwise be missed.
+    'includes': ['rumps', 'AppKit', 'Quartz', 'requests', 'keyring', 'zlib'],
+    # Avoid pulling in Qt when building the rumps-based app
+    'excludes': ['PyQt6', 'PySide6', 'PySide2', 'tkinter'],
 }
 
 setup(
@@ -35,12 +43,13 @@ setup(
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
-    setup_requires=['py2app'],
+    setup_requires=['py2app>=0.28.6'],
     install_requires=[
         'rumps',
-        'PyQt6',
         'requests',
         'keyring',
-        'pynput'
+        'pyobjc',
+        'pyobjc-framework-Cocoa',
+        'pyobjc-framework-Quartz',
     ],
 )

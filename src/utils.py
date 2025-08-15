@@ -6,7 +6,6 @@ Utility functions for the AI Prompt Assistant.
 import os
 import sys
 import subprocess
-from pathlib import Path
 
 
 def get_resource_path(relative_path):

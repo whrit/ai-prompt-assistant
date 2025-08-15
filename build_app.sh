@@ -3,27 +3,36 @@
 # Build script for AI Prompt Assistant
 echo "Building AI Prompt Assistant..."
 
+set -euo pipefail
+
 # Clean previous builds
 echo "Cleaning previous builds..."
 rm -rf build dist
 
-# Create virtual environment if it doesn't exist
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
+# Detect and activate an existing virtual environment
+if [ -d ".venv" ]; then
+  echo "Activating Python venv (.venv)"
+  source .venv/bin/activate
+elif [ -d "venv" ]; then
+  echo "Activating Python venv (venv)"
+  source venv/bin/activate
+else
+  echo "No venv found; creating .venv"
+  python3 -m venv .venv
+  source .venv/bin/activate
 fi
 
-# Activate virtual environment
-echo "Activating virtual environment..."
-source venv/bin/activate
+python -c "import sys, zlib; print('Using Python:', sys.executable); print('zlib has __file__:', hasattr(zlib, '__file__'))"
 
-# Install dependencies
+# Install dependencies (prefer wheel builds; avoid legacy installer)
 echo "Installing dependencies..."
+pip install --upgrade pip wheel setuptools
 pip install -r requirements.txt
-pip install py2app
+pip install 'py2app>=0.28.6'
 
 # Build the application
 echo "Building application with py2app..."
+python -m pip install --use-pep517 . 1>/dev/null 2>/dev/null || true
 python setup.py py2app
 
 echo "Build complete! The application is available in the dist directory."

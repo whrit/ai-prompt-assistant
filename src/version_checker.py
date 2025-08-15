@@ -5,7 +5,6 @@ Checks for updates and notifies the user.
 """
 
 import requests
-import json
 from src import __version__
 
 

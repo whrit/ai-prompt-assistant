@@ -5,7 +5,7 @@ Settings dialog for the AI Prompt Assistant.
 
 import sys
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, 
-                            QLabel, QComboBox, QPushButton, QLineEdit,
+                            QComboBox, QPushButton, QLineEdit,
                             QTabWidget, QWidget, QCheckBox, QGroupBox,
                             QFormLayout, QMessageBox)
 from PyQt6.QtCore import Qt

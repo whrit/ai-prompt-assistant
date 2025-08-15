@@ -5,12 +5,9 @@ This file handles the menubar icon, menu items, and their actions.
 """
 
 import os
-import sys
 import rumps
 import webbrowser
 import threading
-import time
-from PyQt6.QtWidgets import QApplication
 from src.settings_manager import SettingsManager
 from src.history_manager import HistoryManager
 from src.input_dialog import InputDialog

@@ -3,8 +3,8 @@
 
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QLabel, QPushButton, 
                             QHBoxLayout, QSpacerItem, QSizePolicy)
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap, QFont
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 
 class AboutDialog(QDialog):
     """Dialog showing information about the application."""
