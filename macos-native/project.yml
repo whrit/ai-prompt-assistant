@@ -1,0 +1,44 @@
+name: AIPromptAssistant
+options:
+  minimumXcodeGenVersion: 2.30.0
+  groupSortPosition: top
+targets:
+  AIPromptAssistant:
+    type: application
+    platform: macOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources
+      - path: Resources
+    settings:
+      PRODUCT_NAME: AI Prompt Assistant
+      PRODUCT_BUNDLE_IDENTIFIER: co.raspiska.aipromptassistant
+      CURRENT_PROJECT_VERSION: 1
+      MARKETING_VERSION: 0.1.0
+      SWIFT_VERSION: 6.1
+      CODE_SIGN_STYLE: Automatic
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleName: AI Prompt Assistant
+        CFBundleDisplayName: AI Prompt Assistant
+        CFBundleIdentifier: co.raspiska.aipromptassistant
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.productivity
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: false
+    entitlements:
+      path: Resources/AIPromptAssistant.entitlements
+    dependencies:
+      - sdk: Security.framework
+      - sdk: Carbon.framework
+      - package: Sparkle
+        product: Sparkle
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: "2.6.4"
+
+

@@ -6,7 +6,7 @@ from setuptools import setup
 
 APP = ['src/main.py']
 DATA_FILES = [
-    ('resources/icons', ['resources/icons/menubar_icon.png']),
+    ('resources/icons', ['resources/icons/menubar_icon.png', 'resources/icons/menubar_icon_small.png']),
     ('resources/localization', [
         'resources/localization/en.json',
         'resources/localization/es.json',

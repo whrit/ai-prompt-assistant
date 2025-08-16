@@ -53,7 +53,7 @@ class MenuBarApp(rumps.App):
         super(MenuBarApp, self).__init__(
             self.get_string("app.name", "AI Prompt"),
             icon=os.path.join(os.path.dirname(os.path.dirname(__file__)), 
-                             "resources", "icons", "menubar_icon.png")
+                             "resources", "icons", "menubar_icon_small.png")
         )
         
         # Create menu items
@@ -69,10 +69,7 @@ class MenuBarApp(rumps.App):
             # rumps automatically adds a Quit menu item, so we don't need to add our own
         ]
         
-        # Register global keyboard shortcut
-        self.register_keyboard_shortcut()
-        
-        # Start the shortcut handler thread
+        # Start the shortcut handler thread (it will register the shortcut)
         self.init_shortcut_handler_thread.start()
         
         # Set up a timer to check for shortcut triggers
@@ -82,14 +79,20 @@ class MenuBarApp(rumps.App):
     def init_shortcut_handler(self):
         """Initialize the keyboard shortcut handler in a separate thread."""
         try:
+            # Small delay to ensure main thread initialization completes
+            time.sleep(0.1)
+            
             # Initialize the keyboard shortcut handler
             self.shortcut_handler = KeyboardShortcutHandler()
+            
             # Register the keyboard shortcut
             self.register_keyboard_shortcut()
             
             # Check if we need to show the accessibility alert
             if self.shortcut_handler.needs_accessibility_permissions():
-                self.show_accessibility_alert()
+                print("Note: Accessibility permissions may be required for keyboard shortcuts to work")
+                # The alert can be shown later when user tries to use shortcuts
+            
         except Exception as e:
             print(f"Error initializing keyboard shortcut handler: {e}")
     
@@ -113,10 +116,10 @@ class MenuBarApp(rumps.App):
     def register_keyboard_shortcut(self):
         """Register the global keyboard shortcut."""
         shortcut = self.settings.get("keyboard_shortcut", "⌃⌘D")
-        print(f"Keyboard shortcut registered as: {shortcut}")
         
-        # If the shortcut handler is initialized, register the shortcut
+        # Only register if we have a shortcut handler (avoid duplicate registrations)
         if self.shortcut_handler:
+            print(f"Keyboard shortcut registered: {shortcut}")
             try:
                 # Use a simple wrapper function that just shows a notification
                 # We'll use a flag to indicate that the input dialog should be opened
